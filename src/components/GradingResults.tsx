@@ -237,20 +237,20 @@ const GradingResults: React.FC<GradingResultsProps> = ({
                     // View Mode
                     <div className="space-y-4">
                       <div>
-                        <h5 className="text-sm font-medium text-gray-700">Feedback</h5>
-                        <div className="mt-1 text-sm text-gray-900 prose prose-sm max-w-none">
+                        <h5 className="text-sm font-medium text-gray-700 dark:text-gray-200">Feedback</h5>
+                        <div className="mt-1 text-sm text-gray-900 dark:text-gray-100 prose prose-sm max-w-none dark:prose-invert">
                           {result.feedback ? (
                             <ReactMarkdown>{cleanFeedbackText(result.feedback)}</ReactMarkdown>
                           ) : (
-                            <p className="text-gray-500 italic">No feedback provided</p>
+                            <p className="text-gray-500 dark:text-gray-400 italic">No feedback provided</p>
                           )}
                         </div>
                       </div>
                       
                       {result.detailedFeedback && (
                         <div>
-                          <h5 className="text-sm font-medium text-gray-700">Detailed Feedback</h5>
-                          <div className="mt-1 text-sm text-gray-900 prose prose-sm max-w-none">
+                          <h5 className="text-sm font-medium text-gray-700 dark:text-gray-200">Detailed Feedback</h5>
+                          <div className="mt-1 text-sm text-gray-900 dark:text-gray-100 prose prose-sm max-w-none dark:prose-invert">
                             <ReactMarkdown>{cleanFeedbackText(result.detailedFeedback)}</ReactMarkdown>
                           </div>
                         </div>
