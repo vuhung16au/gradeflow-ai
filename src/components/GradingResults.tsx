@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Assessment, GradingResult } from '../types';
-import { DocumentArrowDownIcon, CheckIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { DocumentArrowDownIcon, CheckIcon, XMarkIcon, ClipboardDocumentIcon } from '@heroicons/react/24/outline';
 import ReactMarkdown from 'react-markdown';
 import { cleanFeedbackText } from '../utils/fileUtils';
 
@@ -68,6 +68,79 @@ const GradingResults: React.FC<GradingResultsProps> = ({
     ? Math.round(results.reduce((sum, result) => sum + result.score, 0) / results.length)
     : 0;
 
+  const copyResultsToClipboard = async () => {
+    if (results.length === 0) return;
+
+    const markdownContent = results.map(result => {
+      const grade = getScoreGrade(result.score);
+      const reviewedStatus = result.isReviewed ? '✅ Reviewed' : '⏳ Pending Review';
+      
+      let content = `## ${result.studentName}\n\n`;
+      content += `**Score:** ${result.score}% (${grade})\n\n`;
+      content += `**Status:** ${reviewedStatus}\n\n`;
+      
+      if (result.feedback) {
+        content += `### Feedback\n\n${cleanFeedbackText(result.feedback)}\n\n`;
+      }
+      
+      if (result.detailedFeedback) {
+        content += `### Detailed Feedback\n\n${cleanFeedbackText(result.detailedFeedback)}\n\n`;
+      }
+      
+      if (result.minorAreasForImprovement.length > 0) {
+        content += `### Minor Areas for Improvement\n\n`;
+        result.minorAreasForImprovement.forEach(area => {
+          content += `- ${area}\n`;
+        });
+        content += '\n';
+      }
+      
+      if (result.strengths.length > 0) {
+        content += `### Strengths\n\n`;
+        result.strengths.forEach(strength => {
+          content += `- ✅ ${strength}\n`;
+        });
+        content += '\n';
+      }
+      
+      if (result.weaknesses.length > 0) {
+        content += `### Areas for Improvement\n\n`;
+        result.weaknesses.forEach(weakness => {
+          content += `- ❌ ${weakness}\n`;
+        });
+        content += '\n';
+      }
+      
+      if (result.suggestions.length > 0) {
+        content += `### Suggestions\n\n`;
+        result.suggestions.forEach(suggestion => {
+          content += `- 💡 ${suggestion}\n`;
+        });
+        content += '\n';
+      }
+      
+      content += `**Graded on:** ${result.gradedAt instanceof Date ? result.gradedAt.toLocaleString() : new Date(result.gradedAt).toLocaleString()}\n\n`;
+      content += '---\n\n';
+      
+      return content;
+    }).join('');
+
+    const fullContent = `# Grading Results${assessment ? ` - ${assessment.title}` : ''}\n\n` +
+      `## Summary\n\n` +
+      `- **Total Submissions:** ${results.length}\n` +
+      `- **Average Score:** ${averageScore}%\n` +
+      `- **Reviewed:** ${results.filter(r => r.isReviewed).length}\n` +
+      `- **Pending Review:** ${results.filter(r => !r.isReviewed).length}\n\n` +
+      `## Individual Results\n\n${markdownContent}`;
+
+    try {
+      await navigator.clipboard.writeText(fullContent);
+      // You could add a toast notification here if you have a notification system
+    } catch (err) {
+      console.error('Failed to copy to clipboard:', err);
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -119,7 +192,18 @@ const GradingResults: React.FC<GradingResultsProps> = ({
       {/* Results List */}
       <div className="bg-white dark:bg-gray-800 shadow rounded-lg">
         <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
-          <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">Individual Results</h3>
+          <div className="flex items-center space-x-2">
+            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">Individual Results</h3>
+            {results.length > 0 && (
+              <button
+                onClick={copyResultsToClipboard}
+                className="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                title="Copy all results to clipboard (Markdown format)"
+              >
+                <ClipboardDocumentIcon className="h-5 w-5" />
+              </button>
+            )}
+          </div>
           {results.length > 0 && (
             <button
               onClick={onDeleteAllResults}

@@ -61,6 +61,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
       'text/plain': ['.txt'],
       'text/x-python': ['.py'],
       'application/x-ipynb+json': ['.ipynb'],
+      'text/markdown': ['.md'],
     },
     maxSize: 10 * 1024 * 1024, // 10MB
   });
@@ -100,7 +101,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
               : 'Drag and drop files here, or click to select files'}
           </p>
           <p className="mt-1 text-xs text-gray-500 dark:text-gray-300">
-            Supported formats: PDF, DOCX, TXT, Python (.py), Jupyter Notebook (.ipynb)
+            Supported formats: PDF, DOCX, TXT, Python (.py), Jupyter Notebook (.ipynb), Markdown (.md)
           </p>
           <p className="mt-1 text-xs text-gray-500 dark:text-gray-300">Maximum file size: 10MB</p>
         </div>
