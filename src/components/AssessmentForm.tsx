@@ -338,7 +338,10 @@ const AssessmentForm: React.FC<AssessmentFormProps> = ({
       {/* Assessment Detail Modal */}
       {viewedAssessment && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg max-w-lg w-full p-6 relative">
+          <div
+            className="bg-white dark:bg-gray-800 rounded-lg shadow-lg w-[80vw] max-w-5xl p-6 relative"
+            style={{ maxHeight: '90vh', overflow: 'auto' }}
+          >
             <button
               className="absolute top-3 right-3 text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
               onClick={() => setViewedAssessment(null)}
@@ -350,13 +353,13 @@ const AssessmentForm: React.FC<AssessmentFormProps> = ({
             <p className="mb-4 text-gray-700 dark:text-gray-200">{viewedAssessment.description}</p>
             <div className="mb-4">
               <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-1">Marking Criteria</h3>
-              <div className="prose prose-sm max-w-none text-gray-700 dark:text-gray-200 whitespace-pre-line">
+              <div className="prose prose-sm max-w-none text-gray-700 dark:text-gray-200 whitespace-pre-line overflow-auto" style={{ maxHeight: '200px' }}>
                 {viewedAssessment.markingCriteria}
               </div>
             </div>
             <div>
               <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-1">Instructions for Students</h3>
-              <div className="prose prose-sm max-w-none text-gray-700 dark:text-gray-200 whitespace-pre-line">
+              <div className="prose prose-sm max-w-none text-gray-700 dark:text-gray-200 whitespace-pre-line overflow-auto" style={{ maxHeight: '200px' }}>
                 {viewedAssessment.instructions}
               </div>
             </div>
