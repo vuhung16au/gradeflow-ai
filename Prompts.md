@@ -1,3 +1,17 @@
+# In "Upload Submissions" tab, Users can view the detail of the current assessment info by clicking into the box of assessment 
+
+In "Upload Submissions" tab 
+
+- Show the current selected assessment info above "Upload Submissions" label 
+- Users can view the detail (including the title, description, marking criteria, and instructions for students) of the current assessment info by clicking into the box of assessment 
+
+- make the detail info box wider (80% of the screen width) 
+- users can scroll up and down if the len of the info box is too long 
+
+show the detail info box in markdown format 
+
+
+
 # Implement the "Edit" button for the "Grading Results" tab
 
 - when clicked on the "Edit" button, users can edit the grading result of ONE "student submission"

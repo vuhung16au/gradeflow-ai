@@ -3,6 +3,7 @@ import { useDropzone } from 'react-dropzone';
 import { Assessment, StudentSubmission } from '../types';
 import { isSupportedFile, formatFileSize } from '../utils/fileUtils';
 import { CloudArrowUpIcon, DocumentIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import ReactMarkdown from 'react-markdown';
 
 interface FileUploadProps {
   assessment: Assessment;
@@ -26,6 +27,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
   geminiConnected,
 }) => {
   const [uploadErrors, setUploadErrors] = useState<string[]>([]);
+  const [showAssessmentDetail, setShowAssessmentDetail] = useState(false);
 
   const onDrop = useCallback((acceptedFiles: File[], rejectedFiles: any[]) => {
     // Handle accepted files
@@ -101,13 +103,59 @@ const FileUpload: React.FC<FileUploadProps> = ({
 
   return (
     <div className="space-y-6">
-      {/* Assessment Info */}
+      {/* Assessment Info (clickable, above label) */}
+      <div className="bg-blue-50 dark:bg-blue-900 border border-blue-200 dark:border-blue-800 rounded-md p-4 cursor-pointer hover:shadow transition" onClick={() => setShowAssessmentDetail(true)}>
+        <h3 className="text-sm font-medium text-blue-900 dark:text-blue-100">{assessment.title}</h3>
+        <p className="text-sm text-blue-700 dark:text-blue-200 mt-1">{assessment.description}</p>
+        <p className="text-xs text-blue-600 dark:text-blue-300 mt-2 underline">View Details</p>
+      </div>
+
+      {/* Modal for Assessment Detail */}
+      {showAssessmentDetail && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+          <div className="bg-white dark:bg-gray-900 rounded-lg shadow-lg w-4/5 max-h-[80vh] p-6 relative overflow-hidden">
+            <button
+              className="absolute top-2 right-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+              onClick={() => setShowAssessmentDetail(false)}
+              aria-label="Close"
+            >
+              <XMarkIcon className="h-6 w-6" />
+            </button>
+            <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">Assessment Details</h2>
+            <div className="space-y-6 overflow-y-auto max-h-[calc(80vh-120px)] pr-2">
+              <div>
+                <h3 className="text-md font-semibold text-gray-900 dark:text-gray-100 mb-2">Title</h3>
+                <div className="prose prose-sm max-w-none dark:prose-invert">
+                  <ReactMarkdown>{assessment.title}</ReactMarkdown>
+                </div>
+              </div>
+              <div>
+                <h3 className="text-md font-semibold text-gray-900 dark:text-gray-100 mb-2">Description</h3>
+                <div className="prose prose-sm max-w-none dark:prose-invert">
+                  <ReactMarkdown>{assessment.description}</ReactMarkdown>
+                </div>
+              </div>
+              <div>
+                <h3 className="text-md font-semibold text-gray-900 dark:text-gray-100 mb-2">Marking Criteria</h3>
+                <div className="prose prose-sm max-w-none dark:prose-invert">
+                  <ReactMarkdown>{assessment.markingCriteria}</ReactMarkdown>
+                </div>
+              </div>
+              <div>
+                <h3 className="text-md font-semibold text-gray-900 dark:text-gray-100 mb-2">Instructions for Students</h3>
+                <div className="prose prose-sm max-w-none dark:prose-invert">
+                  <ReactMarkdown>{assessment.instructions}</ReactMarkdown>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Upload Submissions Label */}
       <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
         <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Upload Submissions</h2>
-        <div className="bg-blue-50 dark:bg-blue-900 border border-blue-200 dark:border-blue-800 rounded-md p-4">
-          <h3 className="text-sm font-medium text-blue-900 dark:text-blue-100">{assessment.title}</h3>
-          <p className="text-sm text-blue-700 dark:text-blue-200 mt-1">{assessment.description}</p>
-        </div>
+        {/* (Assessment info moved above) */}
       </div>
 
       {/* File Upload Area */}
