@@ -144,3 +144,8 @@ src/
 
 This project is licensed under the MIT License.
 
+## Screenshots
+
+![create assessments](screenshots/00-create-assessments.png)
+![upload submissions](screenshots/01-upload-assessment-submissions.png)
+![grading results](screenshots/02-grading-results.png)
