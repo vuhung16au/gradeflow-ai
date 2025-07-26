@@ -142,7 +142,12 @@ export class GeminiService {
     }
   }
 
-  private static buildGradingPrompt(assessment: Assessment, submission: StudentSubmission): string {
+  private static buildGradingPrompt(assessment: Assessment, submission: any): string {
+    // If combinedFileContent is present, use it; otherwise, fallback to old logic (for safety)
+    const fileList = submission.files
+      ? submission.files.map((f: any) => `- ${f.fileName}`).join('\n')
+      : submission.fileName;
+    const contentBlock = submission.combinedFileContent || submission.fileContent || '';
     return `You are an expert academic grader. Please evaluate the following student submission based on the provided marking criteria.
 
 ASSESSMENT INFORMATION:
@@ -155,9 +160,8 @@ ${assessment.markingCriteria}
 
 STUDENT SUBMISSION:
 Student: ${submission.studentName}
-File: ${submission.fileName}
-Content:
-${submission.fileContent}
+Files:\n${fileList}
+Content:\n${contentBlock}
 
 Please provide a comprehensive evaluation in the following JSON format:
 {

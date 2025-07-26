@@ -1,0 +1,319 @@
+```python
+
+# src/calculator.py
+
+def add(x, y):
+    """
+    Performs addition of two numbers.
+
+    Args:
+        x (float or int): The first number.
+        y (float or int): The second number.
+
+    Returns:
+        float or int: The sum of x and y.
+    """
+    return x + y
+
+def subtract(x, y):
+    """
+    Performs subtraction of two numbers.
+
+    Args:
+        x (float or int): The first number (minuend).
+        y (float or int): The second number (subtrahend).
+
+    Returns:
+        float or int: The difference between x and y.
+    """
+    return x - y
+
+def multiply(x, y):
+    """
+    Performs multiplication of two numbers.
+
+    Args:
+        x (float or int): The first number.
+        y (float or int): The second number.
+
+    Returns:
+        float or int: The product of x and y.
+    """
+    return x * y
+
+def divide(x, y):
+    """
+    Performs division of two numbers.
+
+    Args:
+        x (float or int): The numerator (dividend).
+        y (float or int): The denominator (divisor).
+
+    Returns:
+        float or int: The quotient of x divided by y.
+
+    Raises:
+        ValueError: If the denominator y is zero.
+    """
+    if y == 0:
+        raise ValueError("Cannot divide by zero!")
+    return x / y
+
+def get_number_input(prompt):
+    """
+    Prompts the user for a number input and validates it.
+
+    Args:
+        prompt (str): The message to display to the user.
+
+    Returns:
+        float: The validated number input.
+    """
+    while True:
+        try:
+            return float(input(prompt))
+        except ValueError:
+            print("Invalid input. Please enter a valid number.")
+
+def display_menu():
+    """Displays the calculator operation menu."""
+    print("\nSelect operation:")
+    print("1. Add")
+    print("2. Subtract")
+    print("3. Multiply")
+    print("4. Divide")
+    print("5. Exit")
+
+def main():
+    """Main function to run the calculator application."""
+    print("Welcome to the Simple Calculator!")
+
+    while True:
+        display_menu()
+        choice = input("Enter choice(1/2/3/4/5): ")
+
+        if choice == '5':
+            print("Exiting calculator. Goodbye!")
+            break
+
+        if choice in ('1', '2', '3', '4'):
+            num1 = get_number_input("Enter first number: ")
+            num2 = get_number_input("Enter second number: ")
+
+            try:
+                if choice == '1':
+                    print(f"{num1} + {num2} = {add(num1, num2)}")
+                elif choice == '2':
+                    print(f"{num1} - {num2} = {subtract(num1, num2)}")
+                elif choice == '3':
+                    print(f"{num1} * {num2} = {multiply(num1, num2)}")
+                elif choice == '4':
+                    print(f"{num1} / {num2} = {divide(num1, num2)}")
+            except ValueError as e:
+                print(f"Error: {e}")
+            except Exception as e:
+                print(f"An unexpected error occurred: {e}")
+        else:
+            print("Invalid input. Please enter a number between 1 and 5.")
+
+if __name__ == "__main__":
+    main()
+``` 
+
+```python 
+
+# src/tests/test_calculator.py
+
+import unittest
+import sys
+import os
+
+# Add the parent directory to the sys.path to allow importing calculator.py
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from calculator import add, subtract, multiply, divide
+
+class TestCalculator(unittest.TestCase):
+    """
+    Unit tests for the calculator functions.
+    """
+
+    def test_add(self):
+        """Test the addition function."""
+        self.assertEqual(add(1, 2), 3)
+        self.assertEqual(add(-1, 1), 0)
+        self.assertEqual(add(-1, -1), -2)
+        self.assertEqual(add(0, 0), 0)
+        self.assertEqual(add(2.5, 3.5), 6.0)
+        self.assertEqual(add(100, 200), 300)
+
+    def test_subtract(self):
+        """Test the subtraction function."""
+        self.assertEqual(subtract(5, 3), 2)
+        self.assertEqual(subtract(3, 5), -2)
+        self.assertEqual(subtract(-1, -1), 0)
+        self.assertEqual(subtract(10, 0), 10)
+        self.assertEqual(subtract(7.5, 2.5), 5.0)
+        self.assertEqual(subtract(0, 0), 0)
+
+    def test_multiply(self):
+        """Test the multiplication function."""
+        self.assertEqual(multiply(2, 3), 6)
+        self.assertEqual(multiply(-2, 3), -6)
+        self.assertEqual(multiply(-2, -3), 6)
+        self.assertEqual(multiply(5, 0), 0)
+        self.assertEqual(multiply(2.5, 2), 5.0)
+        self.assertEqual(multiply(10, 10), 100)
+
+    def test_divide(self):
+        """Test the division function."""
+        self.assertEqual(divide(6, 3), 2)
+        self.assertEqual(divide(5, 2), 2.5)
+        self.assertEqual(divide(-6, 3), -2)
+        self.assertEqual(divide(0, 5), 0)
+        self.assertAlmostEqual(divide(10, 3), 3.3333333333333335) # Using assertAlmostEqual for float comparisons
+
+        # Test division by zero
+        with self.assertRaises(ValueError) as cm:
+            divide(10, 0)
+        self.assertEqual(str(cm.exception), "Cannot divide by zero!")
+
+        with self.assertRaises(ValueError):
+            divide(0, 0)
+
+if __name__ == '__main__':
+    unittest.main()
+
+``` 
+
+```markdown 
+
+README.md 
+
+Simple Calculator
+Project Description
+This is a simple command-line calculator application written in Python. It can perform basic arithmetic operations: addition, subtraction, multiplication, and division. The application includes input validation, error handling, and unit tests to ensure functionality and robustness.
+
+Features
+Addition (+)
+
+Subtraction (-)
+
+Multiplication (*)
+
+Division (/)
+
+User-friendly command-line interface
+
+Input validation for numbers
+
+Error handling for division by zero and invalid inputs
+
+File Structure
+calculator/
+├── src/
+│   ├── calculator.py
+│   └── tests/
+│       └── test_calculator.py
+├── README.md
+└── requirements.txt
+
+Installation Instructions
+Clone the repository (or create the files manually):
+If you have a Git repository, clone it:
+
+git clone <your-repository-url>
+cd calculator
+
+Otherwise, create the calculator directory and the src, src/tests subdirectories, then place the calculator.py, test_calculator.py, requirements.txt, and README.md files in their respective locations as shown in the File Structure above.
+
+Navigate to the project directory:
+
+cd calculator
+
+Install dependencies (if any):
+For this project, there are no external Python dependencies. However, if there were, you would install them using pip:
+
+pip install -r requirements.txt
+
+This project only requires a standard Python 3 installation.
+
+Usage Examples
+To run the calculator:
+
+Navigate to the src directory:
+
+cd src
+
+Run the calculator.py script:
+
+python calculator.py
+
+You will see a menu like this:
+
+Welcome to the Simple Calculator!
+
+Select operation:
+1. Add
+2. Subtract
+3. Multiply
+4. Divide
+5. Exit
+Enter choice(1/2/3/4/5):
+
+Follow the prompts to perform calculations. For example:
+
+Enter choice(1/2/3/4/5): 1
+Enter first number: 10
+Enter second number: 5
+10.0 + 5.0 = 15.0
+
+Select operation:
+1. Add
+2. Subtract
+3. Multiply
+4. Divide
+5. Exit
+Enter choice(1/2/3/4/5): 4
+Enter first number: 10
+Enter second number: 0
+Error: Cannot divide by zero!
+
+Select operation:
+1. Add
+2. Subtract
+3. Multiply
+4. Divide
+5. Exit
+Enter choice(1/2/3/4/5): 5
+Exiting calculator. Goodbye!
+
+Testing Instructions
+To run the unit tests:
+
+Navigate to the src directory:
+
+cd src
+
+Run the tests using unittest:
+
+python -m unittest tests/test_calculator.py
+
+You should see output indicating that all tests passed, similar to:
+
+....
+----------------------------------------------------------------------
+Ran 4 tests in X.XXXs
+
+OK
+
+Dependencies
+Python 3.x (standard library only)
+
+Author
+Your Name (or leave blank if preferred)
+
+License
+This project is open source and available under the MIT License.
+```
+

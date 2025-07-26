@@ -77,18 +77,22 @@ function App() {
   };
 
   const handleFileUpload = (files: File[]) => {
-    const newSubmissions: StudentSubmission[] = files.map((file, index) => ({
-      id: `submission_${Date.now()}_${index}`,
+    if (!files || files.length === 0) return;
+    const now = new Date();
+    const newSubmission: StudentSubmission = {
+      id: `submission_${Date.now()}`,
       assessmentId: currentAssessment?.id || '',
-      studentName: file.name.replace(/\.[^/.]+$/, ''), // Remove extension
-      fileName: file.name,
-      fileContent: '', // Will be populated when file is read
-      fileType: file.name.split('.').pop() || 'txt',
-      uploadedAt: new Date(),
-      file: file, // Store the file reference
-    }));
-    
-    setSubmissions(prev => [...prev, ...newSubmissions]);
+      studentName: files[0].name.replace(/\.[^/.]+$/, ''), // Use first file's name as studentName (can be improved)
+      files: files.map(file => ({
+        fileName: file.name,
+        fileContent: '', // Will be populated when file is read
+        fileType: file.name.split('.').pop() || 'txt',
+        uploadedAt: now,
+        file: file,
+      })),
+      uploadedAt: now,
+    };
+    setSubmissions(prev => [...prev, newSubmission]);
   };
 
   const handleDeleteSubmission = (submissionId: string) => {
@@ -110,19 +114,28 @@ function App() {
 
     try {
       for (const submission of submissions) {
-        // Read file content if not already read
-        if (!submission.fileContent && submission.file) {
-          try {
-            const { readFileAsText } = await import('./utils/fileUtils');
-            const content = await readFileAsText(submission.file!);
-            submission.fileContent = content;
-          } catch (error) {
-            console.error(`Failed to read file ${submission.fileName}:`, error);
-            submission.fileContent = `Error reading file: ${error instanceof Error ? error.message : 'Unknown error'}`;
+        // Read file contents for all files in the submission
+        for (const fileObj of submission.files) {
+          if (!fileObj.fileContent && fileObj.file) {
+            try {
+              const { readFileAsText } = await import('./utils/fileUtils');
+              const content = await readFileAsText(fileObj.file);
+              fileObj.fileContent = content;
+            } catch (error) {
+              console.error(`Failed to read file ${fileObj.fileName}:`, error);
+              fileObj.fileContent = `Error reading file: ${error instanceof Error ? error.message : 'Unknown error'}`;
+            }
           }
         }
 
-        const result = await GeminiService.gradeSubmission(currentAssessment, submission);
+        // Optionally, combine all file contents for grading
+        // You may want to pass all files, or just combine their contents
+        const combinedSubmission = {
+          ...submission,
+          combinedFileContent: submission.files.map(f => `--- ${f.fileName} ---\n${f.fileContent}`).join('\n\n'),
+        };
+
+        const result = await GeminiService.gradeSubmission(currentAssessment, combinedSubmission);
         results.push(result);
       }
 

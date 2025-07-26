@@ -14,11 +14,14 @@ export interface StudentSubmission {
   id: string;
   assessmentId: string;
   studentName: string;
-  fileName: string;
-  fileContent: string;
-  fileType: string;
+  files: Array<{
+    fileName: string;
+    fileContent: string;
+    fileType: string;
+    uploadedAt: Date;
+    file?: File;
+  }>;
   uploadedAt: Date;
-  file?: File; // Optional file reference for when we need to access the original file
 }
 
 export interface GradingResult {

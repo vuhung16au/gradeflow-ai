@@ -149,17 +149,25 @@ const FileUpload: React.FC<FileUploadProps> = ({
             {submissions.map((submission) => (
               <li key={submission.id} className="px-6 py-4">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <DocumentIcon className="h-5 w-5 text-gray-400 dark:text-gray-300 mr-3" />
-                    <div>
-                      <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{submission.fileName}</p>
-                      <p className="text-sm text-gray-500 dark:text-gray-300">
-                        {submission.file && formatFileSize(submission.file.size)}
-                      </p>
-                      <p className="text-xs text-gray-400 dark:text-gray-400">
-                        Uploaded: {submission.uploadedAt.toLocaleString()}
-                      </p>
+                  <div className="flex flex-col w-full">
+                    <div className="flex items-center mb-2">
+                      <DocumentIcon className="h-5 w-5 text-gray-400 dark:text-gray-300 mr-3" />
+                      <div>
+                        <p className="text-sm font-medium text-gray-900 dark:text-gray-100">Submission by: {submission.studentName || 'Unknown'}</p>
+                        <p className="text-xs text-gray-400 dark:text-gray-400">
+                          Uploaded: {submission.uploadedAt.toLocaleString()}
+                        </p>
+                      </div>
                     </div>
+                    <ul className="ml-8 mt-1 space-y-1">
+                      {submission.files.map((file, idx) => (
+                        <li key={idx} className="flex items-center">
+                          <span className="text-xs text-gray-700 dark:text-gray-200 mr-2">{file.fileName}</span>
+                          <span className="text-xs text-gray-500 dark:text-gray-400 mr-2">{file.file && formatFileSize(file.file.size)}</span>
+                          <span className="text-xs text-gray-400 dark:text-gray-400">Uploaded: {file.uploadedAt.toLocaleString()}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                   <button
                     onClick={() => onDeleteSubmission(submission.id)}

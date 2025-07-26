@@ -1,3 +1,16 @@
+# Handle folder upload as ONE "student submission"
+
+- if the "student submission" is a folder, then treat it as ONE "student submission" containing all the files in the folder
+
+# Handle zip file as ONE "student submission"
+
+- if the "student submission" is a zip file, then treat it as ONE "student submission"
+
+# Treat ONE batch of "student submission" as ONE "student submission"
+
+- if the "student submission" is a single file, then treat it as ONE "student submission" 
+- if the "student submission" contains multiple files, then treat it as ONE "student submission" (currently, we treat this cases as multiple submissions from different students)
+
 # Users can view the detailed of uploaded "Your Assessments" 
 
 - by clicking on the one of the "Your Assessments"
@@ -5,7 +18,6 @@
 - view Assessment Description
 - view Assessment Marking Criteria
 - view Assessment Instructions for Students
-
 
 # Implement Dark/light for the UI 
 
