@@ -47,9 +47,35 @@ const FileUpload: React.FC<FileUploadProps> = ({
     
     setUploadErrors(prev => [...prev, ...errors]);
     
-    // Process files for upload
-    if (validFiles.length > 0) {
-      onFileUpload(validFiles);
+    // --- FOLDER UPLOAD HANDLING ---
+    // If any file has webkitRelativePath, group by top-level folder
+    const hasFolder = validFiles.some(file => (file as any).webkitRelativePath && (file as any).webkitRelativePath !== '');
+    if (hasFolder) {
+      // Group files by top-level folder
+      const folderGroups: { [folder: string]: File[] } = {};
+      validFiles.forEach(file => {
+        const relPath = (file as any).webkitRelativePath;
+        if (relPath && relPath !== '') {
+          const topFolder = relPath.split('/')[0];
+          if (!folderGroups[topFolder]) folderGroups[topFolder] = [];
+          folderGroups[topFolder].push(file);
+        } else {
+          // Files not in a folder (shouldn't happen in folder upload, but just in case)
+          if (!folderGroups['__root__']) folderGroups['__root__'] = [];
+          folderGroups['__root__'].push(file);
+        }
+      });
+      // Call onFileUpload for each folder group
+      Object.values(folderGroups).forEach(group => {
+        if (group.length > 0) {
+          onFileUpload(group);
+        }
+      });
+    } else {
+      // Process files for upload as before
+      if (validFiles.length > 0) {
+        onFileUpload(validFiles);
+      }
     }
   }, [onFileUpload]);
 
