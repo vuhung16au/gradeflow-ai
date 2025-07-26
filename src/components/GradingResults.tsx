@@ -316,38 +316,38 @@ const GradingResults: React.FC<GradingResultsProps> = ({
                     // Edit Mode
                     <div className="space-y-4">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700">Score</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">Score</label>
                         <input
                           type="number"
                           min="0"
                           max="100"
                           value={editData.score || 0}
                           onChange={(e) => setEditData(prev => ({ ...prev, score: parseInt(e.target.value) || 0 }))}
-                          className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                          className="mt-1 block w-full border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700">Feedback</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">Feedback</label>
                         <textarea
                           value={editData.feedback || ''}
                           onChange={(e) => setEditData(prev => ({ ...prev, feedback: e.target.value }))}
                           rows={4}
-                          className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                          className="mt-1 block w-full border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
                           placeholder="Enter feedback..."
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700">Detailed Feedback</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">Detailed Feedback</label>
                         <textarea
                           value={editData.detailedFeedback || ''}
                           onChange={(e) => setEditData(prev => ({ ...prev, detailedFeedback: e.target.value }))}
                           rows={6}
-                          className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                          className="mt-1 block w-full border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
                           placeholder="Enter detailed feedback..."
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700">Minor Areas for Improvement (one per line)</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">Minor Areas for Improvement (one per line)</label>
                         <textarea
                           value={editData.minorAreasForImprovement?.join('\n') || ''}
                           onChange={(e) => setEditData(prev => ({ 
@@ -355,19 +355,58 @@ const GradingResults: React.FC<GradingResultsProps> = ({
                             minorAreasForImprovement: e.target.value.split('\n').filter(line => line.trim()) 
                           }))}
                           rows={3}
-                          className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                          className="mt-1 block w-full border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">Strengths (one per line)</label>
+                        <textarea
+                          value={editData.strengths?.join('\n') || ''}
+                          onChange={(e) => setEditData(prev => ({ 
+                            ...prev, 
+                            strengths: e.target.value.split('\n').filter(line => line.trim()) 
+                          }))}
+                          rows={3}
+                          className="mt-1 block w-full border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
+                          placeholder="Enter strengths..."
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">Areas for Improvement (one per line)</label>
+                        <textarea
+                          value={editData.weaknesses?.join('\n') || ''}
+                          onChange={(e) => setEditData(prev => ({ 
+                            ...prev, 
+                            weaknesses: e.target.value.split('\n').filter(line => line.trim()) 
+                          }))}
+                          rows={3}
+                          className="mt-1 block w-full border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
+                          placeholder="Enter areas for improvement..."
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">Suggestions (one per line)</label>
+                        <textarea
+                          value={editData.suggestions?.join('\n') || ''}
+                          onChange={(e) => setEditData(prev => ({ 
+                            ...prev, 
+                            suggestions: e.target.value.split('\n').filter(line => line.trim()) 
+                          }))}
+                          rows={3}
+                          className="mt-1 block w-full border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
+                          placeholder="Enter suggestions..."
                         />
                       </div>
                       <div className="flex space-x-2">
                         <button
                           onClick={() => handleSave(result.id)}
-                          className="px-3 py-1 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
+                          className="px-3 py-1 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                         >
                           Save
                         </button>
                         <button
                           onClick={handleCancel}
-                          className="px-3 py-1 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
+                          className="px-3 py-1 text-sm font-medium text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-700 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
                         >
                           Cancel
                         </button>

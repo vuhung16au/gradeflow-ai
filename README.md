@@ -34,7 +34,7 @@ GradeFlow AI is a modern web application that leverages artificial intelligence 
 
 1. **Clone the repository**:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/vuhung16au/gradeflow-ai
    cd gradeflow-ai
    ```
 
@@ -59,7 +59,7 @@ GradeFlow AI is a modern web application that leverages artificial intelligence 
    - The app automatically uses secure backend API routes in production
    - API key is handled securely on the backend via `/api/gemini.js`
    
-   Get your API key from: https://makersuite.google.com/app/apikey
+   Get your API key from: https://aistudio.google.com/app/apikey
 
 4. **Start the development server**:
    ```bash
@@ -160,8 +160,6 @@ The application will be available at `http://localhost:3000`.
 | Jupyter | .ipynb | Jupyter notebook files | Data science, computational notebooks |
 | ZIP | .zip | Compressed archives | Multiple file submissions, project folders |
 
-**Note**: PDF files are properly parsed to extract text content instead of displaying raw binary data.
-
 ## 📂 Project Structure
 ```
 src/
@@ -199,10 +197,3 @@ src/
 
 This project is licensed under the MIT License.
 
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## 📞 Support
-
-For support and questions, please open an issue on the repository.

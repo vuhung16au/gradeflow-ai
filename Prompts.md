@@ -1,3 +1,11 @@
+# Implement the "Edit" button for the "Grading Results" tab
+
+- when clicked on the "Edit" button, users can edit the grading result of ONE "student submission"
+- the grading result is in markdown format
+- the grading result is the same as the grading result in the "Grading Results" tab
+- the "Edit" button is in the "Grading Results" tab
+
+
 # Users can copy the grading result of ONE "student submission" to clipboard (one-click copy)
 
 - the grading result is in markdown format
