@@ -1,3 +1,9 @@
+# Users can copy the grading result of ONE "student submission" to clipboard (one-click copy)
+
+- the grading result is in markdown format
+- the grading result is the same as the grading result in the "Grading Results" tab
+
+
 # Manage the status of submissions
 
 List of Status:

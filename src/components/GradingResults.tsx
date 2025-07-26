@@ -230,6 +230,62 @@ const GradingResults: React.FC<GradingResultsProps> = ({
                       Reviewed
                     </span>
                   )}
+                  {/* Individual Copy Button */}
+                  <button
+                    onClick={async () => {
+                      const grade = getScoreGrade(result.score);
+                      const reviewedStatus = result.isReviewed ? '✅ Reviewed' : '⏳ Pending Review';
+                      let content = `## ${result.studentName}\n\n`;
+                      content += `**Score:** ${result.score}% (${grade})\n\n`;
+                      content += `**Status:** ${reviewedStatus}\n\n`;
+                      if (result.feedback) {
+                        content += `### Feedback\n\n${cleanFeedbackText(result.feedback)}\n\n`;
+                      }
+                      if (result.detailedFeedback) {
+                        content += `### Detailed Feedback\n\n${cleanFeedbackText(result.detailedFeedback)}\n\n`;
+                      }
+                      if (result.minorAreasForImprovement.length > 0) {
+                        content += `### Minor Areas for Improvement\n\n`;
+                        result.minorAreasForImprovement.forEach(area => {
+                          content += `- ${area}\n`;
+                        });
+                        content += '\n';
+                      }
+                      if (result.strengths.length > 0) {
+                        content += `### Strengths\n\n`;
+                        result.strengths.forEach(strength => {
+                          content += `- ✅ ${strength}\n`;
+                        });
+                        content += '\n';
+                      }
+                      if (result.weaknesses.length > 0) {
+                        content += `### Areas for Improvement\n\n`;
+                        result.weaknesses.forEach(weakness => {
+                          content += `- ❌ ${weakness}\n`;
+                        });
+                        content += '\n';
+                      }
+                      if (result.suggestions.length > 0) {
+                        content += `### Suggestions\n\n`;
+                        result.suggestions.forEach(suggestion => {
+                          content += `- 💡 ${suggestion}\n`;
+                        });
+                        content += '\n';
+                      }
+                      content += `**Graded on:** ${result.gradedAt instanceof Date ? result.gradedAt.toLocaleString() : new Date(result.gradedAt).toLocaleString()}\n\n`;
+                      content += '---\n\n';
+                      try {
+                        await navigator.clipboard.writeText(content);
+                        // Optionally, show a toast/notification here
+                      } catch (err) {
+                        console.error('Failed to copy to clipboard:', err);
+                      }
+                    }}
+                    className="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                    title="Copy this result to clipboard (Markdown format)"
+                  >
+                    <ClipboardDocumentIcon className="h-5 w-5" />
+                  </button>
                 </div>
                 <div className="flex items-center space-x-2">
                   <button
