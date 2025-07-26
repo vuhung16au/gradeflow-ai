@@ -16,7 +16,7 @@
     "@types/react-dom": "^19.1.6",
     "axios": "^1.11.0",
     "js-cookie": "^3.0.5",
-    "pdfjs-dist": "^2.16.105",
+    "pdfjs-dist": "^5.3.93",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-dropzone": "^14.3.8",
