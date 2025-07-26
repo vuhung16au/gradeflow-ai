@@ -157,9 +157,9 @@ const AssessmentForm: React.FC<AssessmentFormProps> = ({
   return (
     <div className="space-y-6">
       {/* Create New Assessment */}
-      <div className="bg-white shadow rounded-lg p-6">
+      <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-medium text-gray-900">Assessments</h2>
+          <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">Assessments</h2>
           <button
             onClick={() => setShowForm(!showForm)}
             className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
@@ -172,7 +172,7 @@ const AssessmentForm: React.FC<AssessmentFormProps> = ({
         {showForm && (
           <form onSubmit={handleSubmit} className="space-y-4 border-t pt-4">
             <div>
-              <label htmlFor="title" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="title" className="block text-sm font-medium text-gray-700 dark:text-gray-200">
                 Assessment Title
               </label>
               <input
@@ -181,13 +181,13 @@ const AssessmentForm: React.FC<AssessmentFormProps> = ({
                 value={formData.title}
                 onChange={handleInputChange('title')}
                 required
-                className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                className="mt-1 block w-full border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
                 placeholder="e.g., ITEC203 Assessment Test 1"
               />
             </div>
 
             <div>
-              <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="description" className="block text-sm font-medium text-gray-700 dark:text-gray-200">
                 Description
               </label>
               <textarea
@@ -196,13 +196,13 @@ const AssessmentForm: React.FC<AssessmentFormProps> = ({
                 onChange={handleInputChange('description')}
                 required
                 rows={3}
-                className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                className="mt-1 block w-full border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
                 placeholder="Brief description of the assessment"
               />
             </div>
 
             <div>
-              <label htmlFor="markingCriteria" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="markingCriteria" className="block text-sm font-medium text-gray-700 dark:text-gray-200">
                 Marking Criteria
               </label>
               <textarea
@@ -211,7 +211,7 @@ const AssessmentForm: React.FC<AssessmentFormProps> = ({
                 onChange={handleInputChange('markingCriteria')}
                 required
                 rows={6}
-                className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                className="mt-1 block w-full border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
                 placeholder="Detailed marking criteria and rubrics..."
               />
               
@@ -228,7 +228,7 @@ const AssessmentForm: React.FC<AssessmentFormProps> = ({
             </div>
 
             <div>
-              <label htmlFor="instructions" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="instructions" className="block text-sm font-medium text-gray-700 dark:text-gray-200">
                 Instructions for Students
               </label>
               <textarea
@@ -237,7 +237,7 @@ const AssessmentForm: React.FC<AssessmentFormProps> = ({
                 onChange={handleInputChange('instructions')}
                 required
                 rows={4}
-                className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                className="mt-1 block w-full border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
                 placeholder="Instructions that were given to students..."
               />
               
@@ -257,7 +257,7 @@ const AssessmentForm: React.FC<AssessmentFormProps> = ({
               <button
                 type="button"
                 onClick={() => setShowForm(false)}
-                className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
                 Cancel
               </button>
@@ -274,33 +274,33 @@ const AssessmentForm: React.FC<AssessmentFormProps> = ({
 
       {/* Assessment List */}
       {assessments.length > 0 && (
-        <div className="bg-white shadow rounded-lg">
-          <div className="px-6 py-4 border-b border-gray-200">
-            <h3 className="text-lg font-medium text-gray-900">Your Assessments</h3>
+        <div className="bg-white dark:bg-gray-800 shadow rounded-lg">
+          <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">Your Assessments</h3>
           </div>
-          <ul className="divide-y divide-gray-200">
+          <ul className="divide-y divide-gray-200 dark:divide-gray-700">
             {assessments.map((assessment) => (
               <li key={assessment.id} className="px-6 py-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
-                    <DocumentTextIcon className="h-5 w-5 text-gray-400 mr-3" />
+                    <DocumentTextIcon className="h-5 w-5 text-gray-400 dark:text-gray-300 mr-3" />
                     <div>
-                      <h4 className="text-sm font-medium text-gray-900">{assessment.title}</h4>
-                      <p className="text-sm text-gray-500">{assessment.description}</p>
-                      <p className="text-xs text-gray-400">
+                      <h4 className="text-sm font-medium text-gray-900 dark:text-gray-100">{assessment.title}</h4>
+                      <p className="text-sm text-gray-500 dark:text-gray-300">{assessment.description}</p>
+                      <p className="text-xs text-gray-400 dark:text-gray-400">
                         Created: {assessment.createdAt instanceof Date ? assessment.createdAt.toLocaleDateString() : new Date(assessment.createdAt).toLocaleDateString()}
                       </p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-2">
                     {currentAssessment?.id === assessment.id && (
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-100">
                         Active
                       </span>
                     )}
                     <button
                       onClick={() => onSelectAssessment(assessment)}
-                      className="px-3 py-1 text-sm font-medium text-blue-700 bg-blue-100 border border-blue-300 rounded-md hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="px-3 py-1 text-sm font-medium text-blue-700 dark:text-blue-100 bg-blue-100 dark:bg-blue-900 border border-blue-300 dark:border-blue-800 rounded-md hover:bg-blue-200 dark:hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                       Select
                     </button>
@@ -314,9 +314,9 @@ const AssessmentForm: React.FC<AssessmentFormProps> = ({
 
       {assessments.length === 0 && !showForm && (
         <div className="text-center py-12">
-          <DocumentTextIcon className="mx-auto h-12 w-12 text-gray-400" />
-          <h3 className="mt-2 text-sm font-medium text-gray-900">No assessments</h3>
-          <p className="mt-1 text-sm text-gray-500">
+          <DocumentTextIcon className="mx-auto h-12 w-12 text-gray-400 dark:text-gray-300" />
+          <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">No assessments</h3>
+          <p className="mt-1 text-sm text-gray-500 dark:text-gray-300">
             Get started by creating your first assessment.
           </p>
         </div>

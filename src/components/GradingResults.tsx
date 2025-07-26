@@ -71,12 +71,12 @@ const GradingResults: React.FC<GradingResultsProps> = ({
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="bg-white shadow rounded-lg p-6">
+      <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-medium text-gray-900">Grading Results</h2>
+            <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">Grading Results</h2>
             {assessment && (
-              <p className="text-sm text-gray-500 mt-1">{assessment.title}</p>
+              <p className="text-sm text-gray-500 dark:text-gray-300 mt-1">{assessment.title}</p>
             )}
           </div>
           <button
@@ -90,26 +90,26 @@ const GradingResults: React.FC<GradingResultsProps> = ({
       </div>
 
       {/* Summary Stats */}
-      <div className="bg-white shadow rounded-lg p-6">
-        <h3 className="text-lg font-medium text-gray-900 mb-4">Summary</h3>
+      <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Summary</h3>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="bg-blue-50 p-4 rounded-lg">
-            <p className="text-sm font-medium text-blue-600">Total Submissions</p>
-            <p className="text-2xl font-bold text-blue-900">{results.length}</p>
+          <div className="bg-blue-50 dark:bg-blue-900 p-4 rounded-lg">
+            <p className="text-sm font-medium text-blue-600 dark:text-blue-100">Total Submissions</p>
+            <p className="text-2xl font-bold text-blue-900 dark:text-blue-100">{results.length}</p>
           </div>
-          <div className="bg-green-50 p-4 rounded-lg">
-            <p className="text-sm font-medium text-green-600">Average Score</p>
-            <p className="text-2xl font-bold text-green-900">{averageScore}%</p>
+          <div className="bg-green-50 dark:bg-green-900 p-4 rounded-lg">
+            <p className="text-sm font-medium text-green-600 dark:text-green-100">Average Score</p>
+            <p className="text-2xl font-bold text-green-900 dark:text-green-100">{averageScore}%</p>
           </div>
-          <div className="bg-yellow-50 p-4 rounded-lg">
-            <p className="text-sm font-medium text-yellow-600">Reviewed</p>
-            <p className="text-2xl font-bold text-yellow-900">
+          <div className="bg-yellow-50 dark:bg-yellow-900 p-4 rounded-lg">
+            <p className="text-sm font-medium text-yellow-600 dark:text-yellow-100">Reviewed</p>
+            <p className="text-2xl font-bold text-yellow-900 dark:text-yellow-100">
               {results.filter(r => r.isReviewed).length}
             </p>
           </div>
-          <div className="bg-purple-50 p-4 rounded-lg">
-            <p className="text-sm font-medium text-purple-600">Pending Review</p>
-            <p className="text-2xl font-bold text-purple-900">
+          <div className="bg-purple-50 dark:bg-purple-900 p-4 rounded-lg">
+            <p className="text-sm font-medium text-purple-600 dark:text-purple-100">Pending Review</p>
+            <p className="text-2xl font-bold text-purple-900 dark:text-purple-100">
               {results.filter(r => !r.isReviewed).length}
             </p>
           </div>
@@ -117,31 +117,31 @@ const GradingResults: React.FC<GradingResultsProps> = ({
       </div>
 
       {/* Results List */}
-      <div className="bg-white shadow rounded-lg">
-        <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-          <h3 className="text-lg font-medium text-gray-900">Individual Results</h3>
+      <div className="bg-white dark:bg-gray-800 shadow rounded-lg">
+        <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+          <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">Individual Results</h3>
           {results.length > 0 && (
             <button
               onClick={onDeleteAllResults}
-              className="text-sm text-red-600 hover:text-red-800 border border-red-200 bg-red-50 px-3 py-1 rounded-md"
+              className="text-sm text-red-600 dark:text-red-300 hover:text-red-800 dark:hover:text-red-400 border border-red-200 dark:border-red-700 bg-red-50 dark:bg-gray-900 px-3 py-1 rounded-md"
             >
               Delete All
             </button>
           )}
         </div>
-        <div className="divide-y divide-gray-200">
+        <div className="divide-y divide-gray-200 dark:divide-gray-700">
           {results.map((result) => (
             <div key={result.id} className="p-6">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center space-x-4">
-                  <h4 className="text-lg font-medium text-gray-900">
+                  <h4 className="text-lg font-medium text-gray-900 dark:text-gray-100">
                     {result.studentName}
                   </h4>
-                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getScoreColor(result.score)}`}>
+                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getScoreColor(result.score)} dark:bg-opacity-80`}>
                     {result.score}% ({getScoreGrade(result.score)})
                   </span>
                   {result.isReviewed && (
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-100">
                       <CheckIcon className="h-3 w-3 mr-1" />
                       Reviewed
                     </span>
@@ -150,19 +150,19 @@ const GradingResults: React.FC<GradingResultsProps> = ({
                 <div className="flex items-center space-x-2">
                   <button
                     onClick={() => setExpandedResult(expandedResult === result.id ? null : result.id)}
-                    className="text-sm text-blue-600 hover:text-blue-800"
+                    className="text-sm text-blue-600 dark:text-blue-200 hover:text-blue-800 dark:hover:text-blue-400"
                   >
                     {expandedResult === result.id ? 'Hide Details' : 'Show Details'}
                   </button>
                   <button
                     onClick={() => handleEdit(result)}
-                    className="text-sm text-gray-600 hover:text-gray-800"
+                    className="text-sm text-gray-600 dark:text-gray-200 hover:text-gray-800 dark:hover:text-gray-400"
                   >
                     Edit
                   </button>
                   <button
                     onClick={() => onDeleteResult(result.id)}
-                    className="text-sm text-red-600 hover:text-red-800"
+                    className="text-sm text-red-600 dark:text-red-300 hover:text-red-800 dark:hover:text-red-400"
                     title="Delete result"
                   >
                     Delete

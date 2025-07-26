@@ -17,6 +17,18 @@ function App() {
   const [isGrading, setIsGrading] = useState(false);
   const [geminiConnected, setGeminiConnected] = useState(false);
   const [activeTab, setActiveTab] = useState<'assessments' | 'upload' | 'grading'>('assessments');
+  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
+    // Default to dark mode
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('theme') === 'light' ? 'light' : 'dark';
+    }
+    return 'dark';
+  });
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', theme === 'dark');
+    localStorage.setItem('theme', theme);
+  }, [theme]);
 
   useEffect(() => {
     // Load assessments from cookies
@@ -30,6 +42,10 @@ function App() {
     // Check Gemini connection
     checkGeminiConnection();
   }, []);
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
+  };
 
   const checkGeminiConnection = async () => {
     const connected = await GeminiService.checkGeminiConnection();
@@ -267,8 +283,8 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
+    <div className={`min-h-screen ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'}`}>
+      <Header theme={theme} onToggleTheme={toggleTheme} />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <ConnectionStatus connected={geminiConnected} onRetry={checkGeminiConnection} />

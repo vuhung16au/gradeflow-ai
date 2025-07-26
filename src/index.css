@@ -9,6 +9,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Tailwind dark mode background */
 }
 
 code {
@@ -20,6 +21,35 @@ code {
 .prose {
   color: #374151;
   line-height: 1.6;
+}
+
+/* Dark mode support for prose */
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #111827;
+    color: #e5e7eb;
+  }
+}
+
+.dark body {
+  background-color: #111827;
+  color: #e5e7eb;
+}
+
+.dark .prose {
+  color: #e5e7eb;
+}
+
+.dark .prose strong {
+  color: #fff;
+}
+
+.dark .prose code {
+  background-color: #1f2937;
+}
+
+.dark .prose pre {
+  background-color: #1f2937;
 }
 
 .prose p {
