@@ -8,6 +8,8 @@ interface FileUploadProps {
   assessment: Assessment;
   submissions: StudentSubmission[];
   onFileUpload: (files: File[]) => void;
+  onDeleteSubmission: (submissionId: string) => void;
+  onDeleteAllSubmissions: () => void;
   onStartGrading: () => void;
   isGrading: boolean;
   geminiConnected: boolean;
@@ -17,17 +19,17 @@ const FileUpload: React.FC<FileUploadProps> = ({
   assessment,
   submissions,
   onFileUpload,
+  onDeleteSubmission,
+  onDeleteAllSubmissions,
   onStartGrading,
   isGrading,
   geminiConnected,
 }) => {
-  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [uploadErrors, setUploadErrors] = useState<string[]>([]);
 
   const onDrop = useCallback((acceptedFiles: File[], rejectedFiles: any[]) => {
     // Handle accepted files
     const validFiles = acceptedFiles.filter(file => isSupportedFile(file.name));
-    setUploadedFiles(prev => [...prev, ...validFiles]);
     
     // Handle rejected files
     const errors = rejectedFiles.map(({ file, errors }) => {
@@ -63,10 +65,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
     maxSize: 10 * 1024 * 1024, // 10MB
   });
 
-  const removeFile = (index: number) => {
-    setUploadedFiles(prev => prev.filter((_, i) => i !== index));
-    setUploadErrors(prev => prev.filter((_, i) => i !== index));
-  };
+
 
   const clearErrors = () => {
     setUploadErrors([]);
@@ -129,28 +128,42 @@ const FileUpload: React.FC<FileUploadProps> = ({
         </div>
       )}
 
-      {/* Uploaded Files */}
-      {uploadedFiles.length > 0 && (
+      {/* Uploaded Submissions */}
+      {submissions.length > 0 && (
         <div className="bg-white shadow rounded-lg">
           <div className="px-6 py-4 border-b border-gray-200">
-            <h3 className="text-lg font-medium text-gray-900">
-              Uploaded Files ({uploadedFiles.length})
-            </h3>
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-medium text-gray-900">
+                Uploaded Submissions ({submissions.length})
+              </h3>
+              <button
+                onClick={onDeleteAllSubmissions}
+                className="inline-flex items-center px-3 py-1 border border-red-300 text-sm font-medium rounded-md text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+              >
+                Delete All
+              </button>
+            </div>
           </div>
           <ul className="divide-y divide-gray-200">
-            {uploadedFiles.map((file, index) => (
-              <li key={index} className="px-6 py-4">
+            {submissions.map((submission) => (
+              <li key={submission.id} className="px-6 py-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
                     <DocumentIcon className="h-5 w-5 text-gray-400 mr-3" />
                     <div>
-                      <p className="text-sm font-medium text-gray-900">{file.name}</p>
-                      <p className="text-sm text-gray-500">{formatFileSize(file.size)}</p>
+                      <p className="text-sm font-medium text-gray-900">{submission.fileName}</p>
+                      <p className="text-sm text-gray-500">
+                        {submission.file && formatFileSize(submission.file.size)}
+                      </p>
+                      <p className="text-xs text-gray-400">
+                        Uploaded: {submission.uploadedAt.toLocaleString()}
+                      </p>
                     </div>
                   </div>
                   <button
-                    onClick={() => removeFile(index)}
+                    onClick={() => onDeleteSubmission(submission.id)}
                     className="text-red-400 hover:text-red-600"
+                    title="Delete submission"
                   >
                     <XMarkIcon className="h-5 w-5" />
                   </button>

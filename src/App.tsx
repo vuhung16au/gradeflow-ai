@@ -75,6 +75,14 @@ function App() {
     setSubmissions(prev => [...prev, ...newSubmissions]);
   };
 
+  const handleDeleteSubmission = (submissionId: string) => {
+    setSubmissions(prev => prev.filter(submission => submission.id !== submissionId));
+  };
+
+  const handleDeleteAllSubmissions = () => {
+    setSubmissions([]);
+  };
+
   const handleStartGrading = async () => {
     if (!currentAssessment || submissions.length === 0) {
       alert('Please select an assessment and upload submissions first.');
@@ -120,6 +128,14 @@ function App() {
           : result
       )
     );
+  };
+
+  const handleDeleteGradingResult = (resultId: string) => {
+    setGradingResults(prev => prev.filter(result => result.id !== resultId));
+  };
+
+  const handleDeleteAllGradingResults = () => {
+    setGradingResults([]);
   };
 
   const handleDownloadResults = () => {
@@ -311,6 +327,8 @@ function App() {
               assessment={currentAssessment}
               submissions={submissions}
               onFileUpload={handleFileUpload}
+              onDeleteSubmission={handleDeleteSubmission}
+              onDeleteAllSubmissions={handleDeleteAllSubmissions}
               onStartGrading={handleStartGrading}
               isGrading={isGrading}
               geminiConnected={geminiConnected}
@@ -323,6 +341,8 @@ function App() {
               assessment={currentAssessment}
               onUpdateResult={handleUpdateGradingResult}
               onDownloadResults={handleDownloadResults}
+              onDeleteResult={handleDeleteGradingResult}
+              onDeleteAllResults={handleDeleteAllGradingResults}
             />
           )}
         </div>

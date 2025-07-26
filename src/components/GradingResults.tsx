@@ -9,6 +9,8 @@ interface GradingResultsProps {
   assessment: Assessment | null;
   onUpdateResult: (resultId: string, updates: Partial<GradingResult>) => void;
   onDownloadResults: () => void;
+  onDeleteResult: (resultId: string) => void;
+  onDeleteAllResults: () => void;
 }
 
 const GradingResults: React.FC<GradingResultsProps> = ({
@@ -16,6 +18,8 @@ const GradingResults: React.FC<GradingResultsProps> = ({
   assessment,
   onUpdateResult,
   onDownloadResults,
+  onDeleteResult,
+  onDeleteAllResults,
 }) => {
   const [expandedResult, setExpandedResult] = useState<string | null>(null);
   const [editingResult, setEditingResult] = useState<string | null>(null);
@@ -114,8 +118,16 @@ const GradingResults: React.FC<GradingResultsProps> = ({
 
       {/* Results List */}
       <div className="bg-white shadow rounded-lg">
-        <div className="px-6 py-4 border-b border-gray-200">
+        <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
           <h3 className="text-lg font-medium text-gray-900">Individual Results</h3>
+          {results.length > 0 && (
+            <button
+              onClick={onDeleteAllResults}
+              className="text-sm text-red-600 hover:text-red-800 border border-red-200 bg-red-50 px-3 py-1 rounded-md"
+            >
+              Delete All
+            </button>
+          )}
         </div>
         <div className="divide-y divide-gray-200">
           {results.map((result) => (
@@ -147,6 +159,13 @@ const GradingResults: React.FC<GradingResultsProps> = ({
                     className="text-sm text-gray-600 hover:text-gray-800"
                   >
                     Edit
+                  </button>
+                  <button
+                    onClick={() => onDeleteResult(result.id)}
+                    className="text-sm text-red-600 hover:text-red-800"
+                    title="Delete result"
+                  >
+                    Delete
                   </button>
                 </div>
               </div>
