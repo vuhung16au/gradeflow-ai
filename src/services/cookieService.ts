@@ -112,4 +112,8 @@ export class CookieService {
       Cookies.remove(key);
     });
   }
+
+  static deleteAllAssessments(): void {
+    this.saveAssessments([]);
+  }
 } 

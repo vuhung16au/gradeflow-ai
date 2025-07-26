@@ -8,6 +8,8 @@ interface AssessmentFormProps {
   onCreateAssessment: (assessment: Omit<Assessment, 'id' | 'createdAt' | 'updatedAt'>) => void;
   onSelectAssessment: (assessment: Assessment) => void;
   currentAssessment: Assessment | null;
+  onDeleteAssessment: (assessmentId: string) => void;
+  onDeleteAllAssessments: () => void;
 }
 
 const AssessmentForm: React.FC<AssessmentFormProps> = ({
@@ -15,6 +17,8 @@ const AssessmentForm: React.FC<AssessmentFormProps> = ({
   onCreateAssessment,
   onSelectAssessment,
   currentAssessment,
+  onDeleteAssessment,
+  onDeleteAllAssessments,
 }) => {
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
@@ -275,8 +279,14 @@ const AssessmentForm: React.FC<AssessmentFormProps> = ({
       {/* Assessment List */}
       {assessments.length > 0 && (
         <div className="bg-white dark:bg-gray-800 shadow rounded-lg">
-          <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+          <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
             <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">Your Assessments</h3>
+            <button
+              onClick={onDeleteAllAssessments}
+              className="ml-4 px-3 py-1 text-sm font-medium text-red-700 dark:text-red-100 bg-red-100 dark:bg-red-900 border border-red-300 dark:border-red-800 rounded-md hover:bg-red-200 dark:hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-red-500"
+            >
+              Delete All
+            </button>
           </div>
           <ul className="divide-y divide-gray-200 dark:divide-gray-700">
             {assessments.map((assessment) => (
@@ -303,6 +313,12 @@ const AssessmentForm: React.FC<AssessmentFormProps> = ({
                       className="px-3 py-1 text-sm font-medium text-blue-700 dark:text-blue-100 bg-blue-100 dark:bg-blue-900 border border-blue-300 dark:border-blue-800 rounded-md hover:bg-blue-200 dark:hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                       Select
+                    </button>
+                    <button
+                      onClick={() => onDeleteAssessment(assessment.id)}
+                      className="px-3 py-1 text-sm font-medium text-red-700 dark:text-red-100 bg-red-100 dark:bg-red-900 border border-red-300 dark:border-red-800 rounded-md hover:bg-red-200 dark:hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-red-500"
+                    >
+                      Delete
                     </button>
                   </div>
                 </div>

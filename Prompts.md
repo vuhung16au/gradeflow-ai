@@ -1,3 +1,12 @@
+# Users can view the detailed of uploaded "Your Assessments" 
+
+- by clicking on the one of the "Your Assessments"
+- view Assessment Title
+- view Assessment Description
+- view Assessment Marking Criteria
+- view Assessment Instructions for Students
+
+
 # Implement Dark/light for the UI 
 
 Default is dark mode. 

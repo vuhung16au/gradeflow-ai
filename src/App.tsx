@@ -282,6 +282,26 @@ function App() {
     return 'F';
   };
 
+  // Delete a single assessment
+  const handleDeleteAssessment = (assessmentId: string) => {
+    const updatedAssessments = assessments.filter(a => a.id !== assessmentId);
+    setAssessments(updatedAssessments);
+    CookieService.saveAssessments(updatedAssessments);
+    // If the deleted assessment was the current one, clear it
+    if (currentAssessment?.id === assessmentId) {
+      setCurrentAssessment(null);
+      CookieService.setCurrentAssessment(null);
+    }
+  };
+
+  // Delete all assessments
+  const handleDeleteAllAssessments = () => {
+    setAssessments([]);
+    CookieService.deleteAllAssessments();
+    setCurrentAssessment(null);
+    CookieService.setCurrentAssessment(null);
+  };
+
   return (
     <div className={`min-h-screen ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'}`}>
       <Header theme={theme} onToggleTheme={toggleTheme} />
@@ -335,6 +355,8 @@ function App() {
               onCreateAssessment={handleCreateAssessment}
               onSelectAssessment={handleSelectAssessment}
               currentAssessment={currentAssessment}
+              onDeleteAssessment={handleDeleteAssessment}
+              onDeleteAllAssessments={handleDeleteAllAssessments}
             />
           )}
           
