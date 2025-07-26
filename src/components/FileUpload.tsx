@@ -29,7 +29,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
 
   const onDrop = useCallback((acceptedFiles: File[], rejectedFiles: any[]) => {
     // Handle accepted files
-    const validFiles = acceptedFiles.filter(file => isSupportedFile(file.name));
+    const validFiles = acceptedFiles.filter(file => isSupportedFile(file.name) || file.name.toLowerCase().endsWith('.zip'));
     
     // Handle rejected files
     const errors = rejectedFiles.map(({ file, errors }) => {
@@ -62,6 +62,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
       'text/x-python': ['.py'],
       'application/x-ipynb+json': ['.ipynb'],
       'text/markdown': ['.md'],
+      'application/zip': ['.zip'],
     },
     maxSize: 10 * 1024 * 1024, // 10MB
   });
@@ -101,7 +102,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
               : 'Drag and drop files here, or click to select files'}
           </p>
           <p className="mt-1 text-xs text-gray-500 dark:text-gray-300">
-            Supported formats: PDF, DOCX, TXT, Python (.py), Jupyter Notebook (.ipynb), Markdown (.md)
+            Supported formats: PDF, DOCX, TXT, Python (.py), Jupyter Notebook (.ipynb), Markdown (.md), ZIP (.zip)
           </p>
           <p className="mt-1 text-xs text-gray-500 dark:text-gray-300">Maximum file size: 10MB</p>
         </div>
