@@ -30,6 +30,7 @@ const AssessmentForm: React.FC<AssessmentFormProps> = ({
   const [markingCriteriaFile, setMarkingCriteriaFile] = useState<File | null>(null);
   const [instructionsFile, setInstructionsFile] = useState<File | null>(null);
   const [uploadErrors, setUploadErrors] = useState<{ markingCriteria?: string; instructions?: string }>({});
+  const [viewedAssessment, setViewedAssessment] = useState<Assessment | null>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -106,7 +107,7 @@ const AssessmentForm: React.FC<AssessmentFormProps> = ({
     onRemoveFile: () => void;
   }) => (
     <div>
-      <label className="block text-sm font-medium text-gray-700 mb-2">
+      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
         {label}
       </label>
       
@@ -309,6 +310,12 @@ const AssessmentForm: React.FC<AssessmentFormProps> = ({
                       </span>
                     )}
                     <button
+                      onClick={() => setViewedAssessment(assessment)}
+                      className="px-3 py-1 text-sm font-medium text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                      View
+                    </button>
+                    <button
                       onClick={() => onSelectAssessment(assessment)}
                       className="px-3 py-1 text-sm font-medium text-blue-700 dark:text-blue-100 bg-blue-100 dark:bg-blue-900 border border-blue-300 dark:border-blue-800 rounded-md hover:bg-blue-200 dark:hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
@@ -325,6 +332,35 @@ const AssessmentForm: React.FC<AssessmentFormProps> = ({
               </li>
             ))}
           </ul>
+        </div>
+      )}
+
+      {/* Assessment Detail Modal */}
+      {viewedAssessment && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg max-w-lg w-full p-6 relative">
+            <button
+              className="absolute top-3 right-3 text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
+              onClick={() => setViewedAssessment(null)}
+              aria-label="Close"
+            >
+              <XMarkIcon className="h-6 w-6" />
+            </button>
+            <h2 className="text-xl font-bold mb-2 text-gray-900 dark:text-gray-100">{viewedAssessment.title}</h2>
+            <p className="mb-4 text-gray-700 dark:text-gray-200">{viewedAssessment.description}</p>
+            <div className="mb-4">
+              <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-1">Marking Criteria</h3>
+              <div className="prose prose-sm max-w-none text-gray-700 dark:text-gray-200 whitespace-pre-line">
+                {viewedAssessment.markingCriteria}
+              </div>
+            </div>
+            <div>
+              <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-1">Instructions for Students</h3>
+              <div className="prose prose-sm max-w-none text-gray-700 dark:text-gray-200 whitespace-pre-line">
+                {viewedAssessment.instructions}
+              </div>
+            </div>
+          </div>
         </div>
       )}
 
