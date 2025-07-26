@@ -90,7 +90,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
       'text/markdown': ['.md'],
       'application/zip': ['.zip'],
     },
-    maxSize: 10 * 1024 * 1024, // 10MB
+    maxSize: 30 * 1024 * 1024, // 30MB
   });
 
 
@@ -130,7 +130,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
           <p className="mt-1 text-xs text-gray-500 dark:text-gray-300">
             Supported formats: PDF, DOCX, TXT, Python (.py), Jupyter Notebook (.ipynb), Markdown (.md), ZIP (.zip)
           </p>
-          <p className="mt-1 text-xs text-gray-500 dark:text-gray-300">Maximum file size: 10MB</p>
+          <p className="mt-1 text-xs text-gray-500 dark:text-gray-300">Maximum file size: 30MB</p>
         </div>
       </div>
 
