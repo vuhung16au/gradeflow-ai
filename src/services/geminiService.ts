@@ -171,13 +171,15 @@ Please provide a comprehensive evaluation in the following JSON format:
 }
 
 IMPORTANT REQUIREMENTS:
-1. "weaknesses" should list up to 10 specific areas where the student should improve
-2. "suggestions" should list up to 10 actionable suggestions for the student
-3. "detailedFeedback" should provide comprehensive step-by-step feedback as plain text
-4. "minorAreasForImprovement" should list minor issues that don't significantly impact the grade
-5. "strengths" should highlight what the student did well
-6. "feedback" and "detailedFeedback" should be plain text, not JSON strings or markdown code blocks
-7. Do not wrap your response in markdown code blocks
+1. Evaluate how well the student followed the provided instructions as part of your assessment.
+2. For each marking criterion, provide specific feedback on how well the student met it in the detailedFeedback section.
+3. "weaknesses" should list up to 10 specific areas where the student should improve
+4. "suggestions" should list up to 10 actionable suggestions for the student
+5. "detailedFeedback" should provide comprehensive step-by-step feedback as plain text
+6. "minorAreasForImprovement" should list minor issues that don't significantly impact the grade
+7. "strengths" should highlight what the student did well
+8. "feedback" and "detailedFeedback" should be plain text, not JSON strings or markdown code blocks
+9. Do not wrap your response in markdown code blocks
 
 Focus on:
 1. Adherence to marking criteria
