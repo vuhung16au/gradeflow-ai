@@ -1,3 +1,15 @@
+# Manage the status of submissions
+
+List of Status:
+- Graded 
+- Not Graded 
+
+In "Upload Submissions" tab: 
+- users can view the list of submissions
+- users can view the status of each submission
+- When clicked on the "Start Grading" button, don't grade it again (if it is already graded, show the grading results)
+
+
 # Handle folder upload as ONE "student submission"
 
 - if the "student submission" is a folder, then treat it as ONE "student submission" containing all the files in the folder

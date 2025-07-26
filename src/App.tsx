@@ -91,6 +91,7 @@ function App() {
         file: file,
       })),
       uploadedAt: now,
+      status: 'Not Graded', // Set initial status
     };
     setSubmissions(prev => [...prev, newSubmission]);
   };
@@ -109,11 +110,20 @@ function App() {
       return;
     }
 
+    // Only grade submissions that are not graded
+    const notGradedSubmissions = submissions.filter(sub => sub.status === 'Not Graded');
+    if (notGradedSubmissions.length === 0) {
+      // All submissions are already graded, just show results
+      setActiveTab('grading');
+      return;
+    }
+
     setIsGrading(true);
-    const results: GradingResult[] = [];
+    const results: GradingResult[] = [...gradingResults]; // Keep previous results
 
     try {
-      for (const submission of submissions) {
+      const updatedSubmissions = [...submissions];
+      for (const submission of notGradedSubmissions) {
         // Read file contents for all files in the submission
         for (const fileObj of submission.files) {
           if (!fileObj.fileContent && fileObj.file) {
@@ -129,7 +139,6 @@ function App() {
         }
 
         // Optionally, combine all file contents for grading
-        // You may want to pass all files, or just combine their contents
         const combinedSubmission = {
           ...submission,
           combinedFileContent: submission.files.map(f => `--- ${f.fileName} ---\n${f.fileContent}`).join('\n\n'),
@@ -137,9 +146,16 @@ function App() {
 
         const result = await GeminiService.gradeSubmission(currentAssessment, combinedSubmission);
         results.push(result);
+
+        // Mark as graded in the submissions array
+        const idx = updatedSubmissions.findIndex(s => s.id === submission.id);
+        if (idx !== -1) {
+          updatedSubmissions[idx] = { ...updatedSubmissions[idx], status: 'Graded' };
+        }
       }
 
       setGradingResults(results);
+      setSubmissions(updatedSubmissions);
       setActiveTab('grading');
     } catch (error) {
       console.error('Grading failed:', error);

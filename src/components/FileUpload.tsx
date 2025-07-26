@@ -185,6 +185,10 @@ const FileUpload: React.FC<FileUploadProps> = ({
                           Uploaded: {submission.uploadedAt.toLocaleString()}
                         </p>
                       </div>
+                      {/* Status Badge */}
+                      <span className={`ml-4 px-2 py-0.5 rounded-full text-xs font-semibold ${submission.status === 'Graded' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200'}`}>
+                        {submission.status}
+                      </span>
                     </div>
                     <ul className="ml-8 mt-1 space-y-1">
                       {submission.files.map((file, idx) => (
@@ -210,42 +214,20 @@ const FileUpload: React.FC<FileUploadProps> = ({
         </div>
       )}
 
-      {/* Grading Button */}
+      {/* Ready to Grade Section */}
       {submissions.length > 0 && (
-        <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">
-                Ready to Grade
-              </h3>
-              <p className="text-sm text-gray-500 dark:text-gray-300">
-                {submissions.length} submission{submissions.length !== 1 ? 's' : ''} uploaded
-              </p>
-            </div>
-            <button
-              onClick={onStartGrading}
-              disabled={isGrading || !geminiConnected}
-              className={`inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2 ${
-                isGrading || !geminiConnected
-                  ? 'bg-gray-400 dark:bg-gray-700 cursor-not-allowed'
-                  : 'bg-blue-600 hover:bg-blue-700 focus:ring-blue-500'
-              }`}
-            >
-              {isGrading ? (
-                <>
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                  Grading...
-                </>
-              ) : (
-                'Start Grading'
-              )}
-            </button>
+        <div className="flex items-center justify-between bg-white dark:bg-gray-800 shadow rounded-lg px-6 py-4 mt-6">
+          <div className="text-sm text-gray-700 dark:text-gray-200">
+            Ready to Grade<br />
+            <span className="font-semibold">{submissions.length} submission{submissions.length > 1 ? 's' : ''} uploaded</span>
           </div>
-          {!geminiConnected && (
-            <p className="mt-2 text-sm text-red-600 dark:text-red-400">
-              Cannot start grading: Gemini API is not connected
-            </p>
-          )}
+          <button
+            onClick={onStartGrading}
+            disabled={isGrading || submissions.every(sub => sub.status === 'Graded')}
+            className={`inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white ${submissions.every(sub => sub.status === 'Graded') ? 'bg-gray-400 cursor-pointer hover:bg-gray-500' : 'bg-blue-600 hover:bg-blue-700'} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500`}
+          >
+            {isGrading ? 'Grading...' : submissions.every(sub => sub.status === 'Graded') ? 'Show Results' : 'Start Grading'}
+          </button>
         </div>
       )}
     </div>

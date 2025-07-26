@@ -22,6 +22,7 @@ export interface StudentSubmission {
     file?: File;
   }>;
   uploadedAt: Date;
+  status: 'Graded' | 'Not Graded'; // Add status field
 }
 
 export interface GradingResult {
