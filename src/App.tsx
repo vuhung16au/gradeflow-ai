@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Assessment, StudentSubmission, GradingResult } from './types';
 import { CookieService } from './services/cookieService';
 import { GeminiService } from './services/geminiService';
+import { cleanFeedbackText } from './utils/fileUtils';
 import Header from './components/Header';
 import AssessmentForm from './components/AssessmentForm';
 import FileUpload from './components/FileUpload';
@@ -195,11 +196,11 @@ function App() {
       markdown += `**Graded on:** ${result.gradedAt instanceof Date ? result.gradedAt.toLocaleString() : new Date(result.gradedAt).toLocaleString()}\n\n`;
       
       if (result.feedback) {
-        markdown += `#### Feedback\n\n${result.feedback}\n\n`;
+        markdown += `#### Feedback\n\n${cleanFeedbackText(result.feedback)}\n\n`;
       }
       
       if (result.detailedFeedback) {
-        markdown += `#### **Detailed Feedback:**\n\n${result.detailedFeedback}\n\n`;
+        markdown += `#### **Detailed Feedback:**\n\n${cleanFeedbackText(result.detailedFeedback)}\n\n`;
       }
       
       if (result.minorAreasForImprovement.length > 0) {

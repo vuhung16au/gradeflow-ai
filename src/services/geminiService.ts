@@ -162,8 +162,8 @@ ${submission.fileContent}
 Please provide a comprehensive evaluation in the following JSON format:
 {
   "score": <number between 0-100>,
-  "feedback": "<general feedback explaining the overall assessment>",
-  "detailedFeedback": "<step-by-step detailed feedback for each part of the submission>",
+  "feedback": "<general feedback explaining the overall assessment - provide as plain text, not JSON>",
+  "detailedFeedback": "<step-by-step detailed feedback for each part of the submission - provide as plain text, not JSON>",
   "minorAreasForImprovement": ["<minor issue 1>", "<minor issue 2>", ...],
   "strengths": ["<strength1>", "<strength2>", ...],
   "weaknesses": ["<area for improvement 1>", "<area for improvement 2>", ...],
@@ -173,9 +173,11 @@ Please provide a comprehensive evaluation in the following JSON format:
 IMPORTANT REQUIREMENTS:
 1. "weaknesses" should list up to 10 specific areas where the student should improve
 2. "suggestions" should list up to 10 actionable suggestions for the student
-3. "detailedFeedback" should provide comprehensive step-by-step feedback
+3. "detailedFeedback" should provide comprehensive step-by-step feedback as plain text
 4. "minorAreasForImprovement" should list minor issues that don't significantly impact the grade
 5. "strengths" should highlight what the student did well
+6. "feedback" and "detailedFeedback" should be plain text, not JSON strings or markdown code blocks
+7. Do not wrap your response in markdown code blocks
 
 Focus on:
 1. Adherence to marking criteria
@@ -197,18 +199,33 @@ Provide constructive, specific feedback that will help the student improve.`;
     suggestions: string[];
   } {
     try {
+      // Clean the response - remove markdown code blocks if present
+      let cleanedResponse = response;
+      
+      // Remove markdown code blocks (```json ... ```)
+      cleanedResponse = cleanedResponse.replace(/```json\s*([\s\S]*?)\s*```/g, '$1');
+      cleanedResponse = cleanedResponse.replace(/```\s*([\s\S]*?)\s*```/g, '$1');
+      
       // Try to extract JSON from the response
-      const jsonMatch = response.match(/\{[\s\S]*\}/);
+      const jsonMatch = cleanedResponse.match(/\{[\s\S]*\}/);
       if (jsonMatch) {
         const parsed = JSON.parse(jsonMatch[0]);
         return {
           score: Math.min(100, Math.max(0, parsed.score || 0)),
-          feedback: parsed.feedback || 'No feedback provided',
-          detailedFeedback: parsed.detailedFeedback || 'No detailed feedback provided',
-          minorAreasForImprovement: Array.isArray(parsed.minorAreasForImprovement) ? parsed.minorAreasForImprovement : [],
-          strengths: Array.isArray(parsed.strengths) ? parsed.strengths : [],
-          weaknesses: Array.isArray(parsed.weaknesses) ? parsed.weaknesses : [],
-          suggestions: Array.isArray(parsed.suggestions) ? parsed.suggestions : [],
+          feedback: this.cleanText(parsed.feedback || 'No feedback provided'),
+          detailedFeedback: this.cleanText(parsed.detailedFeedback || 'No detailed feedback provided'),
+          minorAreasForImprovement: Array.isArray(parsed.minorAreasForImprovement) 
+            ? parsed.minorAreasForImprovement.map(this.cleanText) 
+            : [],
+          strengths: Array.isArray(parsed.strengths) 
+            ? parsed.strengths.map(this.cleanText) 
+            : [],
+          weaknesses: Array.isArray(parsed.weaknesses) 
+            ? parsed.weaknesses.map(this.cleanText) 
+            : [],
+          suggestions: Array.isArray(parsed.suggestions) 
+            ? parsed.suggestions.map(this.cleanText) 
+            : [],
         };
       }
     } catch (error) {
@@ -218,12 +235,38 @@ Provide constructive, specific feedback that will help the student improve.`;
     // Fallback parsing if JSON extraction fails
     return {
       score: 50,
-      feedback: response || 'AI grading completed but response format was unexpected.',
+      feedback: this.cleanText(response) || 'AI grading completed but response format was unexpected.',
       detailedFeedback: 'Unable to parse detailed feedback from AI response.',
       minorAreasForImprovement: ['Unable to parse minor areas for improvement'],
       strengths: ['Content submitted for review'],
       weaknesses: ['Unable to parse detailed feedback'],
       suggestions: ['Please review the submission manually'],
     };
+  }
+
+  private static cleanText(text: string): string {
+    if (!text) return '';
+    
+    // Remove markdown code blocks
+    let cleaned = text.replace(/```json\s*([\s\S]*?)\s*```/g, '$1');
+    cleaned = cleaned.replace(/```\s*([\s\S]*?)\s*```/g, '$1');
+    
+    // Remove JSON formatting if it's just a JSON string
+    if (cleaned.trim().startsWith('{') && cleaned.trim().endsWith('}')) {
+      try {
+        const parsed = JSON.parse(cleaned);
+        // If it's a valid JSON object, extract the feedback field if it exists
+        if (parsed.feedback) {
+          return parsed.feedback;
+        }
+        if (parsed.detailedFeedback) {
+          return parsed.detailedFeedback;
+        }
+      } catch (e) {
+        // If JSON parsing fails, return the cleaned text as-is
+      }
+    }
+    
+    return cleaned.trim();
   }
 } 

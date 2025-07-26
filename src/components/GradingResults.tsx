@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Assessment, GradingResult } from '../types';
 import { DocumentArrowDownIcon, CheckIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import ReactMarkdown from 'react-markdown';
+import { cleanFeedbackText } from '../utils/fileUtils';
 
 interface GradingResultsProps {
   results: GradingResult[];
@@ -23,8 +25,8 @@ const GradingResults: React.FC<GradingResultsProps> = ({
     setEditingResult(result.id);
     setEditData({
       score: result.score,
-      feedback: result.feedback,
-      detailedFeedback: result.detailedFeedback,
+      feedback: cleanFeedbackText(result.feedback),
+      detailedFeedback: cleanFeedbackText(result.detailedFeedback),
       minorAreasForImprovement: result.minorAreasForImprovement,
       strengths: result.strengths,
       weaknesses: result.weaknesses,
@@ -172,6 +174,7 @@ const GradingResults: React.FC<GradingResultsProps> = ({
                           onChange={(e) => setEditData(prev => ({ ...prev, feedback: e.target.value }))}
                           rows={4}
                           className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                          placeholder="Enter feedback..."
                         />
                       </div>
                       <div>
@@ -181,6 +184,7 @@ const GradingResults: React.FC<GradingResultsProps> = ({
                           onChange={(e) => setEditData(prev => ({ ...prev, detailedFeedback: e.target.value }))}
                           rows={6}
                           className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                          placeholder="Enter detailed feedback..."
                         />
                       </div>
                       <div>
@@ -215,13 +219,21 @@ const GradingResults: React.FC<GradingResultsProps> = ({
                     <div className="space-y-4">
                       <div>
                         <h5 className="text-sm font-medium text-gray-700">Feedback</h5>
-                        <p className="mt-1 text-sm text-gray-900 whitespace-pre-wrap">{result.feedback}</p>
+                        <div className="mt-1 text-sm text-gray-900 prose prose-sm max-w-none">
+                          {result.feedback ? (
+                            <ReactMarkdown>{cleanFeedbackText(result.feedback)}</ReactMarkdown>
+                          ) : (
+                            <p className="text-gray-500 italic">No feedback provided</p>
+                          )}
+                        </div>
                       </div>
                       
                       {result.detailedFeedback && (
                         <div>
-                          <h5 className="text-sm font-medium text-gray-700">**Detailed Feedback:**</h5>
-                          <p className="mt-1 text-sm text-gray-900 whitespace-pre-wrap">{result.detailedFeedback}</p>
+                          <h5 className="text-sm font-medium text-gray-700">Detailed Feedback</h5>
+                          <div className="mt-1 text-sm text-gray-900 prose prose-sm max-w-none">
+                            <ReactMarkdown>{cleanFeedbackText(result.detailedFeedback)}</ReactMarkdown>
+                          </div>
                         </div>
                       )}
                       

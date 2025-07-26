@@ -173,3 +173,29 @@ export const processAssessmentFileUpload = async (file: File, type: 'markingCrit
     type,
   };
 }; 
+
+export function cleanFeedbackText(text: string): string {
+  if (!text) return '';
+  
+  // Remove markdown code blocks
+  let cleaned = text.replace(/```json\s*([\s\S]*?)\s*```/g, '$1');
+  cleaned = cleaned.replace(/```\s*([\s\S]*?)\s*```/g, '$1');
+  
+  // Remove JSON formatting if it's just a JSON string
+  if (cleaned.trim().startsWith('{') && cleaned.trim().endsWith('}')) {
+    try {
+      const parsed = JSON.parse(cleaned);
+      // If it's a valid JSON object, extract the feedback field if it exists
+      if (parsed.feedback) {
+        return parsed.feedback;
+      }
+      if (parsed.detailedFeedback) {
+        return parsed.detailedFeedback;
+      }
+    } catch (e) {
+      // If JSON parsing fails, return the cleaned text as-is
+    }
+  }
+  
+  return cleaned.trim();
+} 
