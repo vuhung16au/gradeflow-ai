@@ -3,7 +3,11 @@ import { GoogleGenAI } from '@google/genai';
 
 export class GeminiService {
   private static isProduction(): boolean {
-    return process.env.NODE_ENV === 'production' && window.location.hostname !== 'localhost';
+    // For local development, always use direct API calls
+    // Only use backend API routes when deployed to Vercel (production)
+    return process.env.NODE_ENV === 'production' && 
+           window.location.hostname !== 'localhost' && 
+           window.location.hostname !== '127.0.0.1';
   }
 
   private static getApiKey(): string {
@@ -24,7 +28,12 @@ export class GeminiService {
     submission: StudentSubmission
   ): Promise<GradingResult> {
     // Use backend API for production, direct API for local development
-    if (this.isProduction()) {
+    const isProd = this.isProduction();
+    console.log('GeminiService: Using', isProd ? 'backend API' : 'direct API', 'mode');
+    console.log('NODE_ENV:', process.env.NODE_ENV);
+    console.log('Hostname:', window.location.hostname);
+    
+    if (isProd) {
       return this.gradeSubmissionViaBackend(assessment, submission);
     } else {
       return this.gradeSubmissionDirect(assessment, submission);
@@ -100,7 +109,10 @@ export class GeminiService {
 
   static async checkGeminiConnection(): Promise<boolean> {
     // Use backend API for production, direct API for local development
-    if (this.isProduction()) {
+    const isProd = this.isProduction();
+    console.log('Connection check: Using', isProd ? 'backend API' : 'direct API', 'mode');
+    
+    if (isProd) {
       return this.checkConnectionViaBackend();
     } else {
       return this.checkConnectionDirect();
