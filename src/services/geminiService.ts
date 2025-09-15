@@ -12,8 +12,15 @@ export class GeminiService {
 
   private static getApiKey(): string {
     const apiKey = process.env.REACT_APP_GEMINI_API_KEY;
+    console.log('Environment check:');
+    console.log('- REACT_APP_GEMINI_API_KEY exists:', !!apiKey);
+    console.log('- API key length:', apiKey ? apiKey.length : 0);
+    console.log('- API key starts with:', apiKey ? apiKey.substring(0, 10) + '...' : 'undefined');
+    
     if (!apiKey) {
-      throw new Error('GEMINI_API_KEY not found in environment variables');
+      console.error('REACT_APP_GEMINI_API_KEY not found in environment variables');
+      console.log('Available env vars:', Object.keys(process.env).filter(key => key.includes('GEMINI') || key.includes('API')));
+      throw new Error('REACT_APP_GEMINI_API_KEY not found in environment variables');
     }
     return apiKey;
   }
@@ -73,19 +80,28 @@ export class GeminiService {
     assessment: Assessment,
     submission: StudentSubmission
   ): Promise<GradingResult> {
+    console.log('Starting direct API grading...');
     const prompt = this.buildGradingPrompt(assessment, submission);
+    console.log('Prompt built, length:', prompt.length);
     
     try {
+      console.log('Getting Gemini client...');
       const ai = this.getGeminiClient();
+      console.log('Gemini client created successfully');
+      
+      console.log('Making API call to Gemini...');
       const response = await ai.models.generateContent({
         model: 'gemini-2.5-flash',
         contents: prompt,
       });
       
+      console.log('API call successful, processing response...');
       const responseText = response.text || '';
+      console.log('Response text length:', responseText.length);
       
       // Parse the AI response to extract grading information
       const gradingData = this.parseGradingResponse(responseText);
+      console.log('Grading data parsed successfully');
       
       return {
         id: `grading_${Date.now()}`,
@@ -102,7 +118,10 @@ export class GeminiService {
         isReviewed: false,
       };
     } catch (error) {
-      console.error('Direct grading failed:', error);
+      console.error('Direct grading failed with error:', error);
+      console.error('Error name:', (error as any)?.name);
+      console.error('Error message:', (error as any)?.message);
+      console.error('Error stack:', (error as any)?.stack);
       throw new Error('Failed to grade submission. Please check your Gemini API key and try again.');
     }
   }
@@ -142,14 +161,24 @@ export class GeminiService {
 
   private static async checkConnectionDirect(): Promise<boolean> {
     try {
+      console.log('Testing direct connection to Gemini API...');
       const ai = this.getGeminiClient();
-      await ai.models.generateContent({
+      console.log('Gemini client created for connection test');
+      
+      const response = await ai.models.generateContent({
         model: 'gemini-2.5-flash',
         contents: 'Hello, this is a test message.',
       });
+      
+      console.log('Connection test successful:', response.text);
       return true;
     } catch (error) {
       console.error('Direct connection check failed:', error);
+      console.error('Connection error details:', {
+        name: (error as any)?.name,
+        message: (error as any)?.message,
+        code: (error as any)?.code
+      });
       return false;
     }
   }
